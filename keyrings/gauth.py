@@ -61,7 +61,6 @@ def get_gcloud_credential():
 
   # fall back to fetching credentials from gcloud if Application Default Credentials fails
   try:
-    logging.warning("Trying to retrieve credentials from gcloud...")
     command = subprocess.run(['gcloud','config','config-helper','--format=json(credential)'], check=True, stdout=subprocess.PIPE, universal_newlines=True)
   except Exception as e:
     raise Exception ("gcloud command exited with status: {0}".format(e))
