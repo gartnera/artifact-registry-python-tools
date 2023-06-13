@@ -14,10 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import google
-from google.auth.transport import requests
-from google.auth.exceptions import DefaultCredentialsError
-
 import keyring
 from keyring import backend
 from keyring import credentials
@@ -38,15 +34,6 @@ class GooglePythonAuth(backend.KeyringBackend):
     url = urlparse(service)
     if url.hostname is None or not url.hostname.endswith(".pkg.dev"):
       return
-
-    #trying application default credentials otherwise fall back to gcloud credentials command
-    try:
-      CREDENTIAL_SCOPES =["https://www.googleapis.com/auth/cloud-platform"]
-      credentials, project_id = google.auth.default(scopes=CREDENTIAL_SCOPES)
-      credentials.refresh(requests.Request())
-      return credentials.token
-    except Exception as e:
-      logging.warning("Failed to retrieve Application Default Credentials: {0}".format(e))
 
     try:
       credentials = get_gcloud_credential()
